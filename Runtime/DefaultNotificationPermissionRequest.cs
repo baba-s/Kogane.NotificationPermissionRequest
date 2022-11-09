@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_EDITOR || (!UNITY_IOS && !UNITY_ANDROID)
+
+using System;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 
@@ -8,7 +10,7 @@ namespace Kogane.Internal
     /// iOS / Android プラットフォーム以外の通知許可ダイアログの結果を保持する構造体
     /// </summary>
     [Serializable]
-    internal struct DefaultNotificationPermissionRequestResult : INotificationPermissionRequestResult
+    internal readonly struct DefaultNotificationPermissionRequestResult : INotificationPermissionRequestResult
     {
     }
 
@@ -30,3 +32,5 @@ namespace Kogane.Internal
         }
     }
 }
+
+#endif

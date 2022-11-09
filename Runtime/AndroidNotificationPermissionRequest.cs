@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR || UNITY_ANDROID
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Unity.Notifications.Android;
@@ -11,17 +12,13 @@ namespace Kogane.Internal
     /// Android の通知許可ダイアログの結果を保持する構造体
     /// </summary>
     [Serializable]
+    [SuppressMessage( "ReSharper", "NotAccessedField.Local" )]
     internal struct AndroidNotificationPermissionRequestResult : INotificationPermissionRequestResult
     {
         //================================================================================
         // 変数(SerializeField)
         //================================================================================
         [SerializeField] private string m_status;
-
-        //================================================================================
-        // プロパティ
-        //================================================================================
-        public string Status => m_status;
 
         //================================================================================
         // 関数

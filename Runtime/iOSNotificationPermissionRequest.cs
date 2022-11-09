@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR || UNITY_IOS
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Unity.Notifications.iOS;
@@ -11,6 +12,7 @@ namespace Kogane.Internal
     /// iOS の通知許可ダイアログの結果を保持する構造体
     /// </summary>
     [Serializable]
+    [SuppressMessage( "ReSharper", "NotAccessedField.Local" )]
     internal struct iOSNotificationPermissionRequestResult : INotificationPermissionRequestResult
     {
         //================================================================================
@@ -20,14 +22,6 @@ namespace Kogane.Internal
         [SerializeField] private bool   m_granted;
         [SerializeField] private string m_error;
         [SerializeField] private string m_deviceToken;
-
-        //================================================================================
-        // プロパティ
-        //================================================================================
-        public bool   IsFinished  => m_isFinished;
-        public bool   Granted     => m_granted;
-        public string Error       => m_error;
-        public string DeviceToken => m_deviceToken;
 
         //================================================================================
         // 関数
