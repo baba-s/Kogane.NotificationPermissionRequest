@@ -1,6 +1,5 @@
-﻿#if UNITY_EDITOR || (!UNITY_IOS && !UNITY_ANDROID)
-
-using System;
+﻿using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 
@@ -26,11 +25,9 @@ namespace Kogane.Internal
         /// <summary>
         /// 通知許可ダイアログを表示します
         /// </summary>
-        UniTask<INotificationPermissionRequestResult> INotificationPermissionRequest.RequestAsync()
+        UniTask<INotificationPermissionRequestResult> INotificationPermissionRequest.RequestAsync( CancellationToken cancellationToken )
         {
             return UniTask.FromResult( ( INotificationPermissionRequestResult )new DefaultNotificationPermissionRequestResult() );
         }
     }
 }
-
-#endif

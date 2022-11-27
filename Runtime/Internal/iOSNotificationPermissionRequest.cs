@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR || UNITY_IOS
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Unity.Notifications.iOS;
@@ -56,7 +57,7 @@ namespace Kogane.Internal
         /// <summary>
         /// 通知許可ダイアログを表示します
         /// </summary>
-        async UniTask<INotificationPermissionRequestResult> INotificationPermissionRequest.RequestAsync()
+        async UniTask<INotificationPermissionRequestResult> INotificationPermissionRequest.RequestAsync( CancellationToken cancellationToken )
         {
             var option = AuthorizationOption.Alert | AuthorizationOption.Badge;
 
@@ -64,7 +65,7 @@ namespace Kogane.Internal
 
             while ( !request.IsFinished )
             {
-                await UniTask.NextFrame();
+                await UniTask.NextFrame( cancellationToken );
             }
 
             return new iOSNotificationPermissionRequestResult

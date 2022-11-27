@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Kogane
 {
@@ -23,6 +24,6 @@ namespace Kogane.Internal
         /// <summary>
         /// 通知許可ダイアログを表示します
         /// </summary>
-        UniTask<INotificationPermissionRequestResult> RequestAsync();
+        UniTask<INotificationPermissionRequestResult> RequestAsync( CancellationToken cancellationToken );
     }
 }

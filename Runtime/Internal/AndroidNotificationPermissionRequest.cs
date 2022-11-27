@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR || UNITY_ANDROID
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Unity.Notifications.Android;
@@ -44,7 +45,7 @@ namespace Kogane.Internal
         /// <summary>
         /// 通知許可ダイアログを表示します
         /// </summary>
-        async UniTask<INotificationPermissionRequestResult> INotificationPermissionRequest.RequestAsync()
+        async UniTask<INotificationPermissionRequestResult> INotificationPermissionRequest.RequestAsync( CancellationToken cancellationToken )
         {
             // Android 13 以降なら通知許可ダイアログが表示されます
             // そうでない場合は通知許可ダイアログは表示されず
@@ -53,7 +54,7 @@ namespace Kogane.Internal
 
             while ( request.Status == PermissionStatus.RequestPending )
             {
-                await UniTask.NextFrame();
+                await UniTask.NextFrame( cancellationToken );
             }
 
             return new AndroidNotificationPermissionRequestResult( request.Status.ToString() );

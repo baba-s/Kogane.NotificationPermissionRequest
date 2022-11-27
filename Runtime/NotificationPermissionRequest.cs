@@ -1,5 +1,7 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
 using Kogane.Internal;
+using UnityEngine;
 
 namespace Kogane
 {
@@ -12,9 +14,7 @@ namespace Kogane
         // 変数(static readonly)
         //================================================================================
         private static readonly INotificationPermissionRequest m_request =
-#if !UNITY_EDITOR && UNITY_IOS
-            new iOSNotificationPermissionRequest();
-#elif !UNITY_EDITOR && UNITY_ANDROID
+#if !UNITY_EDITOR && UNITY_ANDROID
             new AndroidNotificationPermissionRequest();
 #else
             new DefaultNotificationPermissionRequest();
@@ -26,9 +26,25 @@ namespace Kogane
         /// <summary>
         /// 通知許可ダイアログを表示します
         /// </summary>
-        public static async UniTask<INotificationPermissionRequestResult> RequestAsync()
+        public static async UniTask<INotificationPermissionRequestResult> RequestAsync( GameObject gameObject )
         {
-            return await m_request.RequestAsync();
+            return await m_request.RequestAsync( gameObject.GetCancellationTokenOnDestroy() );
+        }
+
+        /// <summary>
+        /// 通知許可ダイアログを表示します
+        /// </summary>
+        public static async UniTask<INotificationPermissionRequestResult> RequestAsync<T>( T component ) where T : Component
+        {
+            return await m_request.RequestAsync( component.GetCancellationTokenOnDestroy() );
+        }
+
+        /// <summary>
+        /// 通知許可ダイアログを表示します
+        /// </summary>
+        public static async UniTask<INotificationPermissionRequestResult> RequestAsync( CancellationToken cancellationToken )
+        {
+            return await m_request.RequestAsync( cancellationToken );
         }
     }
 }
