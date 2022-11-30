@@ -2,6 +2,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Kogane.Internal
 {
@@ -11,6 +12,16 @@ namespace Kogane.Internal
     [Serializable]
     internal readonly struct DefaultNotificationPermissionRequestResult : INotificationPermissionRequestResult
     {
+        //================================================================================
+        // 関数
+        //================================================================================
+        /// <summary>
+        /// JSON 形式の文字列に変換して返します
+        /// </summary>
+        public override string ToString()
+        {
+            return JsonUtility.ToJson( this, true );
+        }
     }
 
     /// <summary>

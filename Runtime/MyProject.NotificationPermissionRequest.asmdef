@@ -1,9 +1,8 @@
-﻿{
+{
     "name": "MyProject.NotificationPermissionRequest",
     "rootNamespace": "",
     "references": [
-        "GUID:ac145e6b8c6034cdbadc8c6e26aedbcf",
-        "GUID:1e8e55397bd004beaba78a667566665f",
+        "GUID:749043e84eafd43c5b68398d0efdc36b",
         "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
     "includePlatforms": [],

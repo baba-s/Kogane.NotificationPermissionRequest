@@ -4,8 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
-using Unity.Notifications.Android;
 using UnityEngine;
+using UnityEngine.Android;
 
 namespace Kogane.Internal
 {
@@ -19,7 +19,7 @@ namespace Kogane.Internal
         //================================================================================
         // 変数(SerializeField)
         //================================================================================
-        [SerializeField] private string m_status;
+        [SerializeField] private string m_eventName;
 
         //================================================================================
         // 関数
@@ -27,9 +27,17 @@ namespace Kogane.Internal
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        internal AndroidNotificationPermissionRequestResult( string status )
+        internal AndroidNotificationPermissionRequestResult( string eventName )
         {
-            m_status = status;
+            m_eventName = eventName;
+        }
+
+        /// <summary>
+        /// JSON 形式の文字列に変換して返します
+        /// </summary>
+        public override string ToString()
+        {
+            return JsonUtility.ToJson( this, true );
         }
     }
 
@@ -47,17 +55,18 @@ namespace Kogane.Internal
         /// </summary>
         async UniTask<INotificationPermissionRequestResult> INotificationPermissionRequest.RequestAsync( CancellationToken cancellationToken )
         {
-            // Android 13 以降なら通知許可ダイアログが表示されます
-            // そうでない場合は通知許可ダイアログは表示されず
-            // request.Status が Allowed で返ってきます
-            var request = new PermissionRequest();
+            if ( !AndroidApiLevel.IsAndroidVersion13OrHigher ) return new AndroidNotificationPermissionRequestResult( "None" );
 
-            while ( request.Status == PermissionStatus.RequestPending )
-            {
-                await UniTask.NextFrame( cancellationToken );
-            }
+            var tcs       = new UniTaskCompletionSource<string>();
+            var callbacks = new PermissionCallbacks();
+            callbacks.PermissionGranted               += _ => tcs.TrySetResult( "PermissionGranted" );
+            callbacks.PermissionDenied                += _ => tcs.TrySetResult( "PermissionDenied" );
+            callbacks.PermissionDeniedAndDontAskAgain += _ => tcs.TrySetResult( "PermissionDeniedAndDontAskAgain" );
+            Permission.RequestUserPermission( "android.permission.POST_NOTIFICATIONS", callbacks );
 
-            return new AndroidNotificationPermissionRequestResult( request.Status.ToString() );
+            var eventName = await tcs.Task;
+
+            return new AndroidNotificationPermissionRequestResult( eventName );
         }
     }
 }
