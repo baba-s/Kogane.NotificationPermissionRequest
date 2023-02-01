@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Kogane.Internal;
 using UnityEngine;
@@ -28,6 +29,8 @@ namespace Kogane
         /// </summary>
         public static async UniTask<INotificationPermissionRequestResult> RequestAsync( GameObject gameObject )
         {
+            if ( gameObject == null ) throw new OperationCanceledException();
+
             return await m_request.RequestAsync( gameObject.GetCancellationTokenOnDestroy() );
         }
 
@@ -36,6 +39,8 @@ namespace Kogane
         /// </summary>
         public static async UniTask<INotificationPermissionRequestResult> RequestAsync<T>( T component ) where T : Component
         {
+            if ( component == null ) throw new OperationCanceledException();
+
             return await m_request.RequestAsync( component.GetCancellationTokenOnDestroy() );
         }
 

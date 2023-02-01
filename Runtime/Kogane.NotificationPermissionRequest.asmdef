@@ -1,5 +1,5 @@
 {
-    "name": "MyProject.NotificationPermissionRequest",
+    "name": "Kogane.NotificationPermissionRequest",
     "rootNamespace": "",
     "references": [
         "GUID:749043e84eafd43c5b68398d0efdc36b",
